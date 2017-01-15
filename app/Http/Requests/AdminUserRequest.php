@@ -26,7 +26,7 @@ class AdminUserRequest extends Request
         return [
             //
             'name'=> 'required',
-            'email'=> 'required',
+            'email'=> 'required|unique:users,email',
             'role_id' => 'required',
             'is_Active' => 'required',
             'password' => 'required|min:6'
