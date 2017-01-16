@@ -20,7 +20,8 @@
 	      @foreach($users as $user)
 	      <tr>
 	        <td>{{$user->id}}</td>
-	        <td><img src="{{$user->photo->file}}" width="64px" height="64px" /> </td>
+	        
+	        <td><a href="{{route('admin.users.edit', $user->id)}}"><img class="img-responsive img-rounded" src="{{$user->photo->file}}" width="64px" height="64px" /></a> </td>
 	        <td>{{$user->name}}</td>
 	        <td>{{$user->email}}</td>
 			<td>{{$user->role->name}}</td>
