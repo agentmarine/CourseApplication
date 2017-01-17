@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Session;
 use App\Http\Requests;
 use App\Http\Requests\AdminUserRequest;
 use App\Http\Requests\AdminUsersEditRequest;
+use App\Http\Requests\AdminUserDeleteRequest;
 use App\User;
 use App\Role;
 use App\Photo;
@@ -146,8 +148,13 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(AdminUserDeleteRequest $request, $id)
     {
         //
+        if(User::FindOrFail($id)->delete()){
+            $request->session()->flash('message', 'User has been deleted');
+        }
+
+        return redirect('/admin/users');
     }
 }
