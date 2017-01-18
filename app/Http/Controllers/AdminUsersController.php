@@ -76,6 +76,7 @@ class AdminUsersController extends Controller
         
        
         User::create($input);
+        $request->session()->flash('message', $request['name'] . ' has been created successfully');
 
         return redirect('/admin/users');
         //return $request;
@@ -138,7 +139,7 @@ class AdminUsersController extends Controller
         //$input['password'] = bcrypt($request->password);
 
         $user->update($input);
-
+        $request->session()->flash('message', $request['name'] .' has been updated successfully');
         return redirect('/admin/users');
     }
 
@@ -151,10 +152,24 @@ class AdminUsersController extends Controller
     public function destroy(AdminUserDeleteRequest $request, $id)
     {
         //
-        if(User::FindOrFail($id)->delete()){
-            $request->session()->flash('message', 'User has been deleted');
-        }
+        $user = User::FindOrFail($id);
 
+        // perform the search
+        $position = strpos($user->photo->file, 'placeholder');
+
+        if ( $position === false)
+            if (unlink(public_path() . $user->photo->file )){
+                $user->delete();
+                $request->session()->flash('message', 'User has been deleted successfully');
+            }
+            else{
+                $request->session()->flash('error', 'User has not been deleted due to an issue with the photo.');
+            }        
+
+        else{
+                $user->delete();
+                $request->session()->flash('message', 'User has been deleted successfully');
+        }
         return redirect('/admin/users');
     }
 }
