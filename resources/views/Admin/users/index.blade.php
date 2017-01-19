@@ -9,7 +9,7 @@
 	@if(Session::has('error'))
 		<div class="alert alert-danger alert-dismissible">{{session('error')}}
 		</div>
-		@endif
+	@endif
 	<h1> users </h1>
 	<table class="table table-striped">
 	    <thead>

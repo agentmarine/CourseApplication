@@ -20,6 +20,7 @@ class User
             if(Auth::user()->isActive()){
                 return $next($request);        
             }
+            return redirect(404);
         }
 
         return redirect(404);

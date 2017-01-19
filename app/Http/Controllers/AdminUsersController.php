@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Session;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests;
 use App\Http\Requests\AdminUserRequest;
 use App\Http\Requests\AdminUsersEditRequest;
-use App\Http\Requests\AdminUserDeleteRequest;
 use App\User;
 use App\Role;
 use App\Photo;
@@ -40,17 +39,7 @@ class AdminUsersController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    private function checkPassword($request){
-        if (trim($request->password) == '')
-        {
-            return $request->except('password');
-        }else{
-            echo $request->password;
-            $request->password = bcrypt($request->password);
-            return $request->all();
-        }
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -76,7 +65,7 @@ class AdminUsersController extends Controller
         
        
         User::create($input);
-        $request->session()->flash('message', $request['name'] . ' has been created successfully');
+        Session::flash('message', $request['name'] . ' has been created successfully');
 
         return redirect('/admin/users');
         //return $request;
@@ -139,7 +128,7 @@ class AdminUsersController extends Controller
         //$input['password'] = bcrypt($request->password);
 
         $user->update($input);
-        $request->session()->flash('message', $request['name'] .' has been updated successfully');
+        Session::flash('message', $request['name'] .' has been updated successfully');
         return redirect('/admin/users');
     }
 
@@ -149,7 +138,7 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AdminUserDeleteRequest $request, $id)
+    public function destroy($id)
     {
         //
         $user = User::FindOrFail($id);
@@ -160,15 +149,15 @@ class AdminUsersController extends Controller
         if ( $position === false)
             if (unlink(public_path() . $user->photo->file )){
                 $user->delete();
-                $request->session()->flash('message', 'User has been deleted successfully');
+                Session::flash('message', 'User has been deleted successfully');
             }
             else{
-                $request->session()->flash('error', 'User has not been deleted due to an issue with the photo.');
+                Session::flash('error', 'User has not been deleted due to an issue with the photo.');
             }        
 
         else{
                 $user->delete();
-                $request->session()->flash('message', 'User has been deleted successfully');
+                Session::flash('message', 'User has been deleted successfully');
         }
         return redirect('/admin/users');
     }

@@ -16,8 +16,9 @@ elixir(function(mix) {
 
     .styles([
     		'libs/blog-post.css',
+            'libs/font-awesome.min.css',
+            'libs/font-awesome.css',
     		'libs/bootstrap.css',
-    		'libs/font-awesome.css',
     		'libs/metisMenu.css',
     		'libs/sb-admin-2.css',
 		], './public/css/libs.css').scripts([
