@@ -16,7 +16,7 @@
 	    <thead>
 	    @if($posts)
 	      <tr>
-	        <th>Post ID</th>
+	        <th></th>
 	        <th>Owner</th>
 	        <th>Post Title</th>
 	        <th>Created Date</th>
@@ -26,9 +26,9 @@
 	    <tbody>
 	      @foreach( $posts as $post)
 	      <tr>
-	        <td>{{$post->id}}</td>
+	      	<td><a href="{{route('admin.posts.edit', $post->id)}}"><img class="img-responsive img-rounded" src="{{$post->photo->file}}" width="64px" height="64px" /></a> </td>
 	        <td>{{$post->user->name}}</td>
-	        <td>{{$post->title}}</td>
+	        <a href="{{route('admin.posts.edit', $post->id)}}"> <td>{{$post->title}}</td></a>
 	        <td>{{$post->created_at->diffForhumans()}}</td>
 	        <td>{{$post->updated_at->diffForhumans()}}</td>
 	      </tr>

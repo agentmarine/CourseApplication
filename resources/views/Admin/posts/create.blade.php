@@ -2,7 +2,7 @@
 
 @section('content')
 	<h1> Create Post </h1>
-		{!! Form::open(['method'=>'POST', 'action' => 'AdminPostsController@store']) !!}
+		{!! Form::open(['method'=>'POST','files'=>true,  'action' => 'AdminPostsController@store']) !!}
 			<div class="form-group">
 				{!! Form::label('title', 'Title:') !!}
 				{!! Form::text('title', null,['class'=>'form-control']) !!}
@@ -29,7 +29,8 @@
 
 		{!! Form::close() !!}
 
-		
+		@include('includes.form_error')
+
 
 
 <script type="text/javascript">

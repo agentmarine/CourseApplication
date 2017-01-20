@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\AdminPostRequest;
 use App\Post;
 use App\Photo;
+use App\User;
 use App\Http\Requests;
 
 class AdminPostsController extends Controller
@@ -40,7 +43,7 @@ class AdminPostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdminPostRequest $request)
     {
         //
         $input = $request->all();
@@ -56,12 +59,14 @@ class AdminPostsController extends Controller
         }else{
             $input['photo_id'] = 0;
         }
-        
+
+        $input['user_id'] = Auth::id();
        
         Post::create($input);
         Session::flash('message', $request['name'] . ' has been created successfully');
 
         return redirect('/admin/posts');
+
         //return $request;
     }
 
@@ -85,7 +90,9 @@ class AdminPostsController extends Controller
     public function edit($id)
     {
         //
-        return view('admin.posts.edit');
+        $post = Post::findOrFail($id);
+        $user = User::findOrFail($post->user_id);
+        return view('admin.posts.edit', compact('post', 'user'));
     }
 
     /**
@@ -95,9 +102,29 @@ class AdminPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AdminPostRequest $request, $id)
     {
         //
+        $input = $request->all();
+
+        if ($file = $request->file('photo_id')){
+            $name = time() . $file->getClientOriginalName();
+
+            $file->move('images', $name);
+
+            $photo = Photo::create(['file' => $name]);
+
+            $input['photo_id'] = $photo->id;
+        }else{
+            $input['photo_id'] = 0;
+        }
+
+        $input['user_id'] = Auth::id();
+       
+        Post::create($input);
+        Session::flash('message', $request['name'] . ' has been created successfully');
+
+        return redirect('/admin/posts');
     }
 
     /**
